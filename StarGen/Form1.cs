@@ -56,11 +56,12 @@ namespace StarGen
             lblRadiusInMeters.Text = myStar.StarRadiusInMeters.ToString();
 
             string temp1 = myStar.RotationalSpeed.ToString();
-            string temp2 = myStar.Declination.ToString();
-            string temp3 = myStar.Albedo.ToString();
             string temp4 = myStar.OrbitalSpeed.ToString();
             string temp5 = myStar.AxialTilt.ToString();
+            lblBlackBodyRadiation.Text = myStar.CalculateBlackBodyRadiation().ToString();
+            lblSurfaceGravity.Text = myStar.CalculateSurfaceGravity().ToString();
 
+            string test = "Test";
            
 
 

@@ -19,9 +19,7 @@ namespace StarGen
         public double RotationalPeriod { get; set; }
         public double Luminosity { get; set; } // in Watts
         public double OrbitalSpeed { get; set; } // in m/s (if applicable)
-        public double Albedo { get; set; } // Reflectivity factor (0-1)
-        public double Declination { get; set; } // Only relevant for planets with seasons
-
+        
         private const double SolarRotationSpeed = 2e-6;
         private const double SolarMass = 1.989e30;
 
@@ -33,8 +31,7 @@ namespace StarGen
             SurfaceTemperature = 0;
             AxialTilt = 0;
             RotationalSpeed = 0;
-            Luminosity = 0;
-            Albedo = 0;
+            Luminosity = 0;            
         }
         protected StellarObject(string name, double mass, double radius, double surfaceTemp, double axialTilt, double rotationalSpeed, double luminosity, double albedo = 0)
         {
@@ -44,8 +41,7 @@ namespace StarGen
             SurfaceTemperature = surfaceTemp;
             AxialTilt = axialTilt;
             RotationalSpeed = rotationalSpeed;
-            Luminosity = luminosity;
-            Albedo = albedo;
+            Luminosity = luminosity;            
         }
 
         // Generic method to calculate gravitational acceleration on the object's surface
@@ -61,6 +57,13 @@ namespace StarGen
         public double CalculateBlackBodyRadiation()
         {
             const double StefanBoltzmannConstant = 5.670374419e-8; // W·m⁻²·K⁻⁴
+            double RadiusCalc = Math.Pow(Radius, 2);
+            double tempCalc = Math.Pow(SurfaceTemperature, 4);
+            double Calc1 = RadiusCalc * StefanBoltzmannConstant * tempCalc;
+            double Calc2 = Math.PI * Calc1;
+            double Calc3 = 4 * Calc2;
+            return Calc3;
+
             return 4 * Math.PI * Math.Pow(Radius, 2) * StefanBoltzmannConstant * Math.Pow(SurfaceTemperature, 4);
         }
 

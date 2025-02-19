@@ -435,6 +435,33 @@ namespace StarGen
 
         #endregion
 
+        #region Axial Tilt
+
+        // Function to generate a random axial tilt based on a Gaussian distribution
+        public static double GenerateAxialTilt(double mean, double standardDeviation)
+        {
+            Random rand = new Random();
+
+            // Using the Box-Muller transform to generate two independent standard normal variables
+            double u1 = 1.0 - rand.NextDouble(); // Uniform random variable between 0 and 1
+            double u2 = 1.0 - rand.NextDouble(); // Another uniform random variable
+
+            // Applying the Box-Muller transform
+            double z0 = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2);
+            double z1 = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+
+            // We only need z0 (for generating one normally distributed value)
+            double normalRandomValue = z0;
+
+            // Scale and shift the normal distribution to get the desired tilt
+            double tilt = mean + normalRandomValue * standardDeviation;
+
+            // Return the axial tilt value, ensuring it's between 0° and 90° (if needed)
+            return Math.Max(0, Math.Min(90, tilt));
+        }
+
+        #endregion
+
         public void GenerateRandomStarProperties(string SpectralClass, string Subclass)
         {
             foreach (var (spectralClass, subClass, yerk, minRad, maxRad, minLum, maxLum, minMass, maxMass, minTemp, maxTemp, color, occur, prob, minPeriod, maxPeriod, notes) in StarTypes)
@@ -443,10 +470,13 @@ namespace StarGen
                 {
                     StarMassRatio = (random.NextDouble() * (maxMass - minMass) + minMass);
                     StarMass = SolarMass * StarMassRatio;
-                    StarLuminosityRatio = CalculateLuminosityRatioFromMass(StarMass);
-                    StarLuminosity = CalculateLuminosityInWattsFromMass(StarMass);
+                    Mass = SolarMass * StarMassRatio;
+                    StarLuminosityRatio = CalculateLuminosityRatioFromMass(Mass);
+                    StarLuminosity = CalculateLuminosityInWattsFromMass(Mass);
+                    Luminosity = CalculateLuminosityInWattsFromMass(Mass);
                     StarRadiusRatio = CalculateRadiusRatio(StarMassRatio);
                     StarRadiusInMeters = CalculateRadiusFromRadiusRatio(StarRadiusRatio);
+                    Radius = CalculateRadiusFromRadiusRatio(StarRadiusRatio);
 
                     // Function to calculate the rotational speed (in km/s) based on mass of the star
                     RotationalSpeed = CalculateRotationalSpeed(StarMassRatio);
@@ -454,13 +484,18 @@ namespace StarGen
                     // Function to calculate the rotational period (P) based on mass (in solar masses)
                     RotationalPeriod = CalculateRotationalPeriod(StarMassRatio);
 
+                    // Generate a random axial tilt for a star
+                    // GenerateAxialTilt(mean, standard deviation);
+                    AxialTilt = GenerateAxialTilt(0.0, 5.0);  // Mean tilt = 0° (aligned with galactic plane)  // Standard deviation = 5°
 
                     double StarSurfaceTemp = CalculateSurfaceTemperatureFromMassRatio(StarMassRatio, StarLuminosity);    //temp of the sun in kelvin
+
+                    SurfaceTemperature = CalculateSurfaceTemperature(StarLuminosity, StarRadiusInMeters);
 
                     StarInnerHabitableZone = CalculateHabitableZoneInner();
                     StarOuterHabitableZone = CalculateHabitableZoneOuter();
 
-                    SurfaceTemperature = CalculateSurfaceTemperature(StarLuminosity, StarRadiusRatio);
+                    
 
                     return;
                 }

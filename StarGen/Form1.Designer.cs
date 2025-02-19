@@ -49,6 +49,12 @@
             lblSurfaceTemp = new Label();
             label1 = new Label();
             lblRadiusInMeters = new Label();
+            label2 = new Label();
+            lblSurfaceGravity = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
+            lblBlackBodyRadiation = new Label();
             SuspendLayout();
             // 
             // lblOutputMass
@@ -242,11 +248,71 @@
             lblRadiusInMeters.TabIndex = 47;
             lblRadiusInMeters.Text = "RadiusInMeters";
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(79, 441);
+            label2.Name = "label2";
+            label2.Size = new Size(130, 25);
+            label2.TabIndex = 50;
+            label2.Text = "Surface Gravity";
+            // 
+            // lblSurfaceGravity
+            // 
+            lblSurfaceGravity.AutoSize = true;
+            lblSurfaceGravity.Location = new Point(220, 441);
+            lblSurfaceGravity.Name = "lblSurfaceGravity";
+            lblSurfaceGravity.Size = new Size(130, 25);
+            lblSurfaceGravity.TabIndex = 49;
+            lblSurfaceGravity.Text = "Surface Gravity";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(96, 510);
+            label4.Name = "label4";
+            label4.Size = new Size(59, 25);
+            label4.TabIndex = 52;
+            label4.Text = "label4";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(220, 510);
+            label5.Name = "label5";
+            label5.Size = new Size(113, 25);
+            label5.TabIndex = 51;
+            label5.Text = "SurfaceTemp";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(41, 475);
+            label6.Name = "label6";
+            label6.Size = new Size(168, 25);
+            label6.TabIndex = 54;
+            label6.Text = "BlackBodyRadiation";
+            // 
+            // lblBlackBodyRadiation
+            // 
+            lblBlackBodyRadiation.AutoSize = true;
+            lblBlackBodyRadiation.Location = new Point(220, 475);
+            lblBlackBodyRadiation.Name = "lblBlackBodyRadiation";
+            lblBlackBodyRadiation.Size = new Size(168, 25);
+            lblBlackBodyRadiation.TabIndex = 53;
+            lblBlackBodyRadiation.Text = "BlackBodyRadiation";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(802, 1019);
+            Controls.Add(label6);
+            Controls.Add(lblBlackBodyRadiation);
+            Controls.Add(label4);
+            Controls.Add(label5);
+            Controls.Add(label2);
+            Controls.Add(lblSurfaceGravity);
             Controls.Add(label1);
             Controls.Add(lblRadiusInMeters);
             Controls.Add(SurfaceTemp);
@@ -296,5 +362,11 @@
         private Label lblSurfaceTemp;
         private Label label1;
         private Label lblRadiusInMeters;
+        private Label label2;
+        private Label lblSurfaceGravity;
+        private Label label4;
+        private Label label5;
+        private Label label6;
+        private Label lblBlackBodyRadiation;
     }
 }
