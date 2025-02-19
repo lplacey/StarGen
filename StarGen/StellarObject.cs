@@ -16,6 +16,7 @@ namespace StarGen
         public double SurfaceTemperature { get; set; } // in Kelvin
         public double AxialTilt { get; set; } // in degrees
         public double RotationalSpeed { get; set; } // in m/s
+        public double RotationalPeriod { get; set; }
         public double Luminosity { get; set; } // in Watts
         public double OrbitalSpeed { get; set; } // in m/s (if applicable)
         public double Albedo { get; set; } // Reflectivity factor (0-1)

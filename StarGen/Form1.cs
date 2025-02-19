@@ -13,11 +13,10 @@ namespace StarGen
 
             // Preserve original file order
             var orderedStarTypes = StarSystemSimulator.StarTypes.ToList();
-
-            // Reorder subclasses but keep types in original order
+            
             var reorderedStarTypes = orderedStarTypes
                 .GroupBy(s => new { s.spectralClass, s.color }) // Keep original type order
-                .SelectMany(g => g.OrderByDescending(s => s.subclass)) // Sort subclasses in descending order
+                .SelectMany(g => g.OrderBy(s => s.subclass)) // Sort subclasses in ascending order
                 .ToList();
 
             cboStarSubClass.DataSource = reorderedStarTypes
@@ -45,20 +44,29 @@ namespace StarGen
             string starSubclass = parts[2].Trim();  // Subclass is the 3rd element
 
             StarSystemSimulator myStar = new StarSystemSimulator(starType, starSubclass);
-            //myStar.GenerateRandomStarProperties(starType, starSubclass);
+            
             lblOutputMass.Text = myStar.StarMass.ToString();
             lblLuminosity.Text = myStar.StarLuminosity.ToString();
-            lblInnerHabitableZone.Text = myStar.InnerHabitableZone.ToString();
-            lblOuterHabitableZone.Text = myStar.OuterHabitableZone.ToString();
+            lblInnerHabitableZone.Text = myStar.StarInnerHabitableZone.ToString();
+            lblOuterHabitableZone.Text = myStar.StarOuterHabitableZone.ToString();
             lblLuminosityRatio.Text = myStar.StarLuminosityRatio.ToString();
-            lblRadius.Text = myStar.StarRadius.ToString();
-            //myStar = StarSystemSimulator("TestStart", , double starLuminosity, double planetSize, double orbitalSpeed)
+            lblRadiusRatio.Text = myStar.StarRadiusRatio.ToString();
+            lblMassRatio.Text = myStar.StarMassRatio.ToString();
+            lblSurfaceTemp.Text = myStar.SurfaceTemperature.ToString();
+            lblRadiusInMeters.Text = myStar.StarRadiusInMeters.ToString();
 
-            lblCalculateLuminosityFromMassRatio.Text = myStar.CalculateLuminosityFromMassRatio(myStar.StarMassRatio).ToString();
-            lblCalculateLuminosityRatioFromMass.Text = myStar.CalculateLuminosityRatioFromMass(myStar.StarMass).ToString();
-            lblCalculateLuminosityInWattsFromMass.Text = myStar.CalculateLuminosityInWattsFromMass(myStar.StarMass).ToString();
-            //lblCalculateLuminosityExponent.Text = myStar.CalculateLuminosityExponent(myStar.StarMass).ToString();
-            //lblCalculateMassLuminosityRelation2.Text = myStar.CalculateMassLuminosityRelation2(myStar.StarMass).ToString();
+            string temp1 = myStar.RotationalSpeed.ToString();
+            string temp2 = myStar.Declination.ToString();
+            string temp3 = myStar.Albedo.ToString();
+            string temp4 = myStar.OrbitalSpeed.ToString();
+            string temp5 = myStar.AxialTilt.ToString();
+
+           
+
+
+
+
+
         }
     }
 }

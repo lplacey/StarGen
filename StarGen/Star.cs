@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,18 +30,45 @@ namespace StarGen
         private const double SolarRadius = 6.955e8; // meters
         private const double SolarTemperature = 5778; // Kelvin        
         private static readonly Random random = new Random();
+        private const double RotationConstant = 10;
+
+        // Stefan-Boltzmann constant (in W/m^2/K^4)
+        private const double StefanBoltzmannConstant = 5.67e-8;
+
         public string StarName { get; set; }
         public double StarMass { get; set; } // in kg
         public double StarMassRatio { get; set; }
+        public double StarRadiusRatio { get; set; }
 
-        public double StarRadius { get; set; }
+        public double StarRadiusInMeters { get; set; }
+        public double StarRadiusInMeters2 { get; set; }
+        public double StarRadiusInMeters3 { get; set; }
         public double StarLuminosity { get; set; } // in Watts
         //public double OrbitalSpeed { get; set; } // in m/s
         public double StarLuminosityRatio { get; set; }
-        public double InnerHabitableZone { get; set; }
-        public double OuterHabitableZone { get; set; }
+        public double StarInnerHabitableZone { get; set; }
+        public double StarOuterHabitableZone { get; set; }
 
-        public static List<(string spectralClass, string subclass, string yerkesClass, double minRadius, double maxRadius, double minLum, double maxLum, double minMass, double maxMass, double minTemp, double maxTemp, string color, double occur, double prob, string notes)> StarTypes = new List<(string, string, string, double, double, double, double, double, double, double, double, string, double, double, string)>();
+        public static List<(string spectralClass, string subclass, string yerkesClass, double minRadius, double maxRadius, double minLum, double maxLum, double minMass, double maxMass, double minTemp, double maxTemp, string color, double occur, double prob, double minPeriod, double maxPeriod, string notes)> StarTypes = new List<(string, string, string, double, double, double, double, double, double, double, double, string, double, double, double, double, string)>();
+        
+        public StarSystemSimulator(string starName, double starMass, double starLuminosity, double planetSize, double orbitalSpeed)
+        {
+            StarName = starName;
+            StarMass = starMass;
+            StarLuminosity = starLuminosity;            
+            OrbitalSpeed = orbitalSpeed;
+        }
+
+        public StarSystemSimulator(string SpectralClass, string subclass) : base()
+        {
+            StarName = "Test";
+            LoadStarTypesFromCSV("Fully_Validated_Stellar_Classification_Data.csv");
+            GenerateRandomStarProperties(SpectralClass, subclass);
+            //StarMass = starMass;
+            //StarLuminosity = starLuminosity;
+            //PlanetSize = planetSize;
+            //OrbitalSpeed = orbitalSpeed;
+        }
 
         public static void LoadStarTypesFromCSV(string filePath)
         {
@@ -75,49 +103,48 @@ namespace StarGen
                              values[11].Trim(),
                              double.Parse(values[12], CultureInfo.InvariantCulture),
                              double.Parse(values[13], CultureInfo.InvariantCulture),
-                             values.Length > 14 ? values[14].Trim() : "")
+                             double.Parse(values[14], CultureInfo.InvariantCulture),
+                             double.Parse(values[15], CultureInfo.InvariantCulture),
+                             values.Length > 16 ? values[16].Trim() : "")
                         );
                     }
                 }
             }
             catch (Exception ex)
             {
-                
+
             }
         }
 
-        public StarSystemSimulator(string starName, double starMass, double starLuminosity, double planetSize, double orbitalSpeed)
+        #region Temperature Calculations
+
+        public static double CalculateSurfaceTemperature(double luminosity, double radius)
         {
-            StarName = starName;
-            StarMass = starMass;
-            StarLuminosity = starLuminosity;            
-            OrbitalSpeed = orbitalSpeed;
+            // Luminosity (in watts) and radius (in meters) are given as inputs
+            // Temperature (in kelvins) is calculated using the Stefan-Boltzmann law
+
+            // Ensure the radius is in meters (assuming input radius is in meters already)
+            double temperature = Math.Pow(luminosity / (4 * Math.PI * Math.Pow(radius, 2) * StefanBoltzmannConstant), 0.25);
+
+            return temperature;
         }
 
-        public StarSystemSimulator(string SpectralClass, string subclass) : base()
+        public static double CalculateSurfaceTemperatureFromMassRatio(double massRatio, double luminosity)   // Uses MassRatio and luminosity
         {
-            StarName = "Test";
-            LoadStarTypesFromCSV("Fully_Validated_Stellar_Classification_Data.csv");
-            GenerateRandomStarProperties(SpectralClass, subclass);
-            //StarMass = starMass;
-            //StarLuminosity = starLuminosity;
-            //PlanetSize = planetSize;
-            //OrbitalSpeed = orbitalSpeed;
+            // Estimate the radius based on the luminosity (Luminosity-Radius relation)
+            // R^2 = L / (4 * pi * sigma * T^4)
+            // So, T = (L / (4 * pi * sigma * R^2)) ^ (1/4)
+            // Here, we'll use an approximation for the radius for a typical main sequence star.
+            double radius = SolarRadius * Math.Pow(massRatio, 0.8);  // Approximation for main-sequence stars
+
+            // Now calculate the temperature using the Stefan-Boltzmann law
+            double temperature = Math.Pow(luminosity / (4 * Math.PI * StefanBoltzmannConstant * Math.Pow(radius, 2)), 0.25);
+            return temperature;
         }
 
-        //public double CalculateMassLuminosityRelation2(double massInKG)
-        //{
-        //    if (massInKG <= 0)
-        //        return 0;
+        #endregion
 
-        //    double StarRatio = massInKG / SolarMass;
-        //    //double exponent = CalculateLuminosityExponent(mass);
-        //    double exponent = StarRatio < 0.43 ? 2.3 : (StarRatio < 2.0 ? 4.0 : (StarRatio < 20.0 ? 3.5 : 3.0));
-        //    //double luminosity = SolarLuminosity * Math.Pow(massInKG / SolarMass, exponent);
-        //    double luminosity = SolarLuminosity * Math.Pow(StarRatio, exponent);
-        //    return Math.Max(0, luminosity);
-
-        //}
+        #region Luminosity Calculations
 
         public double CalculateLuminosityExponent(double massRatio)
         {
@@ -171,7 +198,34 @@ namespace StarGen
             return CalculateLuminosityFromMassRatio(massRatio) / SolarLuminosity;
         }
 
-        public double CalculateRadius(double mass)
+        #endregion
+
+        #region Radius Calculations
+
+        // Function to calculate radius based on the Mass-Radius relation
+        public static double CalculateRadiusFromMass(double mass, double alpha = 0.8)
+        {
+            // Radius = Solar radius * (Mass / Solar mass) ^ alpha
+            double radius = SolarRadius * Math.Pow(mass, alpha);
+            return radius;
+        }
+
+        // Function to calculate radius based on the Luminosity-Radius relation using the Stefan-Boltzmann Law
+        public static double CalculateRadiusFromLuminosity(double luminosity, double temperature)
+        {
+            // Radius = sqrt(Luminosity / (4 * π * σ * T^4))
+            double radius = Math.Sqrt(luminosity / (4 * Math.PI * StefanBoltzmannConstant * Math.Pow(temperature, 4)));
+            return radius;
+        }
+
+        public static double CalculateRadiusFromRadiusRatio(double StarRadiusRatio)
+        {
+            double starRadiusInMeters = StarRadiusRatio * SolarRadius; // 1.5 times the solar radius            
+            
+            return starRadiusInMeters;
+        }
+
+        public static double CalculateRadiusRatio(double massRatio)
         {
             /*
             * Dynamic Mass-Radius Algorithm:
@@ -181,31 +235,31 @@ namespace StarGen
 
             double exponent;
 
-            if (mass >= 30)         // O-type supergiants
+            if (massRatio >= 30)         // O-type supergiants
                 exponent = 1.0;
-            else if (mass >= 10)    // O-type main sequence
+            else if (massRatio >= 10)    // O-type main sequence
                 exponent = 0.9;
-            else if (mass >= 2)     // B/A-type stars
+            else if (massRatio >= 2)     // B/A-type stars
                 exponent = 0.7;
-            else if (mass >= 1.5)   // F-type stars
+            else if (massRatio >= 1.5)   // F-type stars
                 exponent = 0.65;
-            else if (mass >= 1)     // G-type (Sun-like)
+            else if (massRatio >= 1)     // G-type (Sun-like)
                 exponent = 0.6;
-            else if (mass >= 0.5)   // K/M-type (cool main sequence)
+            else if (massRatio >= 0.5)   // K/M-type (cool main sequence)
                 exponent = 0.55;
-            else if (mass >= 0.08)  // L/T-type (brown dwarfs)
+            else if (massRatio >= 0.08)  // L/T-type (brown dwarfs)
                 exponent = 0.4;
-            else if (mass >= 0.05)  // T/Y brown dwarfs
+            else if (massRatio >= 0.05)  // T/Y brown dwarfs
                 exponent = 0.3;
             else                    // Substellar objects
                 exponent = 0.2;
 
-            double rad = Math.Pow(mass, exponent);
+            double rad = Math.Pow(massRatio, exponent);
             // Calculate radius using mass-radius relationship
             return rad;
         }
 
-        public double CalculateStarRadius(string SpectralClass, string subclass, double luminosity)
+        public static double CalculateStarRadius(string SpectralClass, string subclass, double luminosityRatio)
         {
             var starData = StarTypes.FirstOrDefault(s => s.spectralClass == SpectralClass && s.subclass == subclass);
 
@@ -224,57 +278,54 @@ namespace StarGen
                 return minRadius; // If no luminosity range, return min radius
 
             // Interpolate the radius based on luminosity
-            double radius = minRadius + ((luminosity - minLum) / (maxLum - minLum)) * (maxRadius - minRadius);
+            double radius = minRadius + ((luminosityRatio - minLum) / (maxLum - minLum)) * (maxRadius - minRadius);
 
             // Clamp radius within the range
             return Math.Max(minRadius, Math.Min(radius, maxRadius));
         }
 
-        public void GenerateRandomStarProperties(string SpectralClass, string Subclass)
+        public static double CalculateRadiusFromLuminosityAndMass(double massInKg, double luminosityRatio, double temperature)
         {
-            foreach (var (spectralClass, subClass, yerk, minRad, maxRad, minLum, maxLum, minMass, maxMass, minTemp, maxTemp, color, occur, prob, notes) in StarTypes)
-            {
-                if (spectralClass == SpectralClass && subClass == Subclass)
-                {
-                    StarMassRatio = (random.NextDouble() * (maxMass - minMass) + minMass);
-                    StarMass = SolarMass * StarMassRatio;
+           
+            // Use the Stefan-Boltzmann law to calculate the radius
+            // Radius = sqrt(L / (4 * pi * sigma * T^4))
+            double radius = Math.Sqrt(luminosityRatio / (4 * Math.PI * StefanBoltzmannConstant * Math.Pow(temperature, 4)));
 
-                    //StarLuminosity = SolarLuminosity * (random.NextDouble() * (maxLum - minLum) + minLum);
-                    //StarLuminosity = CalculateLuminosityRatioFromMass(StarMass);
-                    StarLuminosityRatio = CalculateLuminosityRatioFromMass(StarMass);
-                    StarLuminosity = CalculateLuminosityInWattsFromMass(StarMass);
-
-                    StarRadius = CalculateStarRadius(SpectralClass, Subclass, StarLuminosity);
-
-                    //LuminosityRatio = StarLuminosity / SolarLuminosity;
-
-                    InnerHabitableZone = CalculateHabitableZoneInner();
-                    OuterHabitableZone = CalculateHabitableZoneOuter();
-                    return;
-                }
-            }            
+            return radius;
         }
 
-        public string GetStarType()
+        #endregion
+
+        #region Rotational Calculations
+
+        public static double CalculateRotationalPeriod(double mass)
         {
-            foreach (var (spectralClass, subClass, _, minLum, maxLum, _, _, _, _, _, _, _, _, _, _) in StarTypes)
-            {
-                StarLuminosityRatio = StarLuminosity / SolarLuminosity;
-                //if (LuminosityRatio >= minLum && LuminosityRatio <= maxLum)
-                //{
-                //    return $"{spectralClass} ({subClass})";
-                //}
-                if (StarLuminosityRatio >= minLum)
-                {
-                    string temp = "Reached";
-                    if (StarLuminosityRatio <= maxLum)
-                    {
-                        return $"{spectralClass} ({subClass})";
-                    }
-                }
-            }
-            return "Unknown";
+            return RotationConstant / Math.Sqrt(mass);
         }
+
+        public static double CalculateRotationalSpeed(double mass)
+        {
+            // Calculate the radius (in Solar radii)
+            double radius = CalculateRadiusRatio(mass);
+            
+            // Convert radius to meters (1 R⊙ = 6.96 x 10^8 m)
+            double radiusInMeters = radius * 6.96e8;
+
+            // Calculate the rotational period (in seconds)
+            double rotationalPeriod = CalculateRotationalPeriod(mass) * 86400; // Convert days to seconds
+
+            // Calculate the equatorial velocity (v_rot = 2 * pi * R / P)
+            double rotationalSpeed = (2 * Math.PI * radiusInMeters) / rotationalPeriod;
+
+            // Convert rotational speed to km/s
+            rotationalSpeed /= 1000;
+
+            return rotationalSpeed;  // in km/s
+        }
+
+        #endregion
+
+        #region HabitableZone Calculations
 
         public double CalculateHabitableZoneInner()
         {
@@ -285,6 +336,10 @@ namespace StarGen
         {
             return Math.Sqrt(StarLuminosityRatio) * 1.37; // AU
         }
+
+        #endregion
+
+        #region AgeRelatedCalculations
 
         public static (double mass, double luminosity, double radius, double temperature) CalculateStellarProperties(
                 double initialMass, double initialLuminosity, double initialRadius, double initialTemperature, double age)
@@ -323,7 +378,94 @@ namespace StarGen
             }
 
             return (mass, luminosity, radius, temperature);
-        }    
+        }
+
+        public static (double mass, double luminosity, double radius, double temperature, double rotationalPeriod) CalculateStellarProperties2(
+        double initialMass, double initialLuminosity, double initialRadius, double initialTemperature, double age)
+        {
+            // Constants
+            double SolarMass = 1.989e30;  // Solar mass in kg
+            double mainSequenceLifetime = 10 * Math.Pow(initialMass / SolarMass, -2.5) * 1e9; // years
+
+            // Initial properties
+            double mass = initialMass;
+            double luminosity = initialLuminosity;
+            double radius = initialRadius;
+            double temperature = initialTemperature;
+
+            // Rotational Period (in days)
+            double rotationalPeriod;
+
+            if (age <= mainSequenceLifetime)
+            {
+                // Main Sequence Phase
+                mass = initialMass * (1 - 0.1 * (age / mainSequenceLifetime));
+                luminosity = initialLuminosity * Math.Pow(mass / initialMass, 3.5);
+                radius = initialRadius * Math.Pow(mass / initialMass, 0.8);
+                temperature = initialTemperature * Math.Pow(mass / initialMass, 0.5);
+
+                // Main sequence stars have relatively short rotational periods.
+                rotationalPeriod = 10 / Math.Pow(mass, 1.5); // Example empirical formula for rotational period
+            }
+            else if (age <= mainSequenceLifetime + 1e9)
+            {
+                // Red Giant Phase (after hydrogen depletion)
+                mass = initialMass * 0.8; // Loses more mass
+                luminosity = initialLuminosity * 1000;
+                radius = initialRadius * 100;
+                temperature = 3500; // Red giants have cooler surfaces
+
+                // Red giants have longer rotational periods compared to main sequence stars.
+                rotationalPeriod = 100; // Approximate for red giants (e.g., 100 days)
+            }
+            else
+            {
+                // White Dwarf Phase (after shedding outer layers)
+                mass = initialMass * 0.6; // Further mass loss
+                luminosity = initialLuminosity * Math.Exp(-(age - (mainSequenceLifetime + 1e9)) / 1e9);
+                radius = initialRadius * 0.01;
+                temperature = 100000 * Math.Exp(-(age - (mainSequenceLifetime + 1e9)) / 1e9);
+
+                // White dwarfs have very slow rotation due to the loss of angular momentum.
+                rotationalPeriod = 500; // Approximate for white dwarfs (e.g., 500 days)
+            }
+
+            return (mass, luminosity, radius, temperature, rotationalPeriod);
+        }
+
+        #endregion
+
+        public void GenerateRandomStarProperties(string SpectralClass, string Subclass)
+        {
+            foreach (var (spectralClass, subClass, yerk, minRad, maxRad, minLum, maxLum, minMass, maxMass, minTemp, maxTemp, color, occur, prob, minPeriod, maxPeriod, notes) in StarTypes)
+            {
+                if (spectralClass == SpectralClass && subClass == Subclass)
+                {
+                    StarMassRatio = (random.NextDouble() * (maxMass - minMass) + minMass);
+                    StarMass = SolarMass * StarMassRatio;
+                    StarLuminosityRatio = CalculateLuminosityRatioFromMass(StarMass);
+                    StarLuminosity = CalculateLuminosityInWattsFromMass(StarMass);
+                    StarRadiusRatio = CalculateRadiusRatio(StarMassRatio);
+                    StarRadiusInMeters = CalculateRadiusFromRadiusRatio(StarRadiusRatio);
+
+                    // Function to calculate the rotational speed (in km/s) based on mass of the star
+                    RotationalSpeed = CalculateRotationalSpeed(StarMassRatio);
+
+                    // Function to calculate the rotational period (P) based on mass (in solar masses)
+                    RotationalPeriod = CalculateRotationalPeriod(StarMassRatio);
+
+
+                    double StarSurfaceTemp = CalculateSurfaceTemperatureFromMassRatio(StarMassRatio, StarLuminosity);    //temp of the sun in kelvin
+
+                    StarInnerHabitableZone = CalculateHabitableZoneInner();
+                    StarOuterHabitableZone = CalculateHabitableZoneOuter();
+
+                    SurfaceTemperature = CalculateSurfaceTemperature(StarLuminosity, StarRadiusRatio);
+
+                    return;
+                }
+            }
+        }
     }
 }
 
