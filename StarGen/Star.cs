@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,11 +31,12 @@ namespace StarGen
         private static readonly Random random = new Random();
         public string StarName { get; set; }
         public double StarMass { get; set; } // in kg
+        public double StarMassRatio { get; set; }
 
         public double StarRadius { get; set; }
         public double StarLuminosity { get; set; } // in Watts
         //public double OrbitalSpeed { get; set; } // in m/s
-        public double LuminosityRatio { get; set; }
+        public double StarLuminosityRatio { get; set; }
         public double InnerHabitableZone { get; set; }
         public double OuterHabitableZone { get; set; }
 
@@ -103,24 +105,26 @@ namespace StarGen
             //OrbitalSpeed = orbitalSpeed;
         }
 
-        public double CalculateMassLuminosityRelation2(double mass)
+        //public double CalculateMassLuminosityRelation2(double massInKG)
+        //{
+        //    if (massInKG <= 0)
+        //        return 0;
+
+        //    double StarRatio = massInKG / SolarMass;
+        //    //double exponent = CalculateLuminosityExponent(mass);
+        //    double exponent = StarRatio < 0.43 ? 2.3 : (StarRatio < 2.0 ? 4.0 : (StarRatio < 20.0 ? 3.5 : 3.0));
+        //    //double luminosity = SolarLuminosity * Math.Pow(massInKG / SolarMass, exponent);
+        //    double luminosity = SolarLuminosity * Math.Pow(StarRatio, exponent);
+        //    return Math.Max(0, luminosity);
+
+        //}
+
+        public double CalculateLuminosityExponent(double massRatio)
         {
-            if (mass <= 0)
+            if (massRatio <= 0)
                 return 0;
 
-            double exponent = CalculateLuminosityExponent(mass);
-            double luminosity = SolarLuminosity * Math.Pow(mass / SolarMass, exponent);
-
-            return Math.Max(0, luminosity);
-
-        }
-
-        public double CalculateLuminosityExponent(double mass)
-        {
-            if (mass <= 0)
-                return 0;
-
-            return mass < 0.43 ? 2.3 : (mass < 2.0 ? 4.0 : (mass < 20.0 ? 3.5 : 3.0));
+            return massRatio < 0.43 ? 2.3 : (massRatio < 2.0 ? 4.0 : (massRatio < 20.0 ? 3.5 : 3.0));
         }
 
         public double CalculateLuminosityFromMassRatio(double massRatio)
@@ -128,8 +132,17 @@ namespace StarGen
             if (massRatio <= 0)
                 return 0;
 
-            double exponent = CalculateLuminosityExponent(massRatio);
-            return SolarLuminosity * Math.Pow(massRatio, exponent);
+            double exponent = CalculateLuminosityExponent(massRatio);            
+            double luminosityRatio = Math.Pow(massRatio, exponent);
+            return SolarLuminosity * luminosityRatio;
+        }
+
+        public double CalculateMassRatioFromMass(double massInKg)
+        {
+            if (massInKg <= 0)
+                return 0;
+
+            return massInKg / SolarMass;
         }
 
         public double CalculateLuminosityRatioFromMass(double massInKg)
@@ -137,12 +150,12 @@ namespace StarGen
             if (massInKg <= 0)
                 return 0;
 
-            double exponent = massInKg < (0.43 * SolarMass) ? 2.3 : (massInKg < (2.0 * SolarMass) ? 4.0 : (massInKg < (20.0 * SolarMass) ? 3.5 : 3.0));
-
-            // Solar Luminosity in Watts
-            double luminosity = SolarLuminosity * Math.Pow(massInKg, exponent);
+            double massRatio = CalculateMassRatioFromMass(massInKg);
+            double exponent = CalculateLuminosityExponent(massRatio);
+            // Star Luminosity in Watts
+            double starLuminosityRatio = Math.Pow(massRatio, exponent);
             
-            return Math.Max(0, luminosity);
+            return Math.Max(0, starLuminosityRatio);
         }
 
         public double CalculateLuminosityInWattsFromMass(double mass)
@@ -223,14 +236,17 @@ namespace StarGen
             {
                 if (spectralClass == SpectralClass && subClass == Subclass)
                 {
-                    StarMass = SolarMass * (random.NextDouble() * (maxMass - minMass) + minMass);
+                    StarMassRatio = (random.NextDouble() * (maxMass - minMass) + minMass);
+                    StarMass = SolarMass * StarMassRatio;
 
                     //StarLuminosity = SolarLuminosity * (random.NextDouble() * (maxLum - minLum) + minLum);
-                    StarLuminosity = CalculateLuminosityRatioFromMass(StarMass);
+                    //StarLuminosity = CalculateLuminosityRatioFromMass(StarMass);
+                    StarLuminosityRatio = CalculateLuminosityRatioFromMass(StarMass);
+                    StarLuminosity = CalculateLuminosityInWattsFromMass(StarMass);
 
                     StarRadius = CalculateStarRadius(SpectralClass, Subclass, StarLuminosity);
 
-                    LuminosityRatio = StarLuminosity / SolarLuminosity;
+                    //LuminosityRatio = StarLuminosity / SolarLuminosity;
 
                     InnerHabitableZone = CalculateHabitableZoneInner();
                     OuterHabitableZone = CalculateHabitableZoneOuter();
@@ -243,15 +259,15 @@ namespace StarGen
         {
             foreach (var (spectralClass, subClass, _, minLum, maxLum, _, _, _, _, _, _, _, _, _, _) in StarTypes)
             {
-                LuminosityRatio = StarLuminosity / SolarLuminosity;
+                StarLuminosityRatio = StarLuminosity / SolarLuminosity;
                 //if (LuminosityRatio >= minLum && LuminosityRatio <= maxLum)
                 //{
                 //    return $"{spectralClass} ({subClass})";
                 //}
-                if (LuminosityRatio >= minLum)
+                if (StarLuminosityRatio >= minLum)
                 {
                     string temp = "Reached";
-                    if (LuminosityRatio <= maxLum)
+                    if (StarLuminosityRatio <= maxLum)
                     {
                         return $"{spectralClass} ({subClass})";
                     }
@@ -262,12 +278,12 @@ namespace StarGen
 
         public double CalculateHabitableZoneInner()
         {
-            return Math.Sqrt(LuminosityRatio) * 0.95; // AU
+            return Math.Sqrt(StarLuminosityRatio) * 0.95; // AU
         }
 
         public double CalculateHabitableZoneOuter()
         {
-            return Math.Sqrt(LuminosityRatio) * 1.37; // AU
+            return Math.Sqrt(StarLuminosityRatio) * 1.37; // AU
         }
 
         public static (double mass, double luminosity, double radius, double temperature) CalculateStellarProperties(

@@ -43,6 +43,18 @@
             lblLuminosityRatio = new Label();
             label14 = new Label();
             lblRadius = new Label();
+            label1 = new Label();
+            lblCalculateLuminosityFromMassRatio = new Label();
+            lblCalculateLuminosityRatioFromMass = new Label();
+            label4 = new Label();
+            lblCalculateLuminosityInWattsFromMass = new Label();
+            label6 = new Label();
+            lblCalculateLuminosityExponent = new Label();
+            label15 = new Label();
+            lblCalculateMassLuminosityRelation2 = new Label();
+            label3 = new Label();
+            label5 = new Label();
+            label8 = new Label();
             SuspendLayout();
             // 
             // lblOutputMass
@@ -74,7 +86,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(183, 379);
+            button1.Location = new Point(313, 805);
             button1.Name = "button1";
             button1.Size = new Size(126, 43);
             button1.TabIndex = 15;
@@ -180,11 +192,131 @@
             lblRadius.TabIndex = 29;
             lblRadius.Text = "Radius";
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 398);
+            label1.Name = "label1";
+            label1.Size = new Size(292, 25);
+            label1.TabIndex = 31;
+            label1.Text = "CalculateLuminosityFromMassRatio";
+            // 
+            // lblCalculateLuminosityFromMassRatio
+            // 
+            lblCalculateLuminosityFromMassRatio.AutoSize = true;
+            lblCalculateLuminosityFromMassRatio.Location = new Point(371, 398);
+            lblCalculateLuminosityFromMassRatio.Name = "lblCalculateLuminosityFromMassRatio";
+            lblCalculateLuminosityFromMassRatio.Size = new Size(311, 25);
+            lblCalculateLuminosityFromMassRatio.TabIndex = 32;
+            lblCalculateLuminosityFromMassRatio.Text = "lblCalculateLuminosityFromMassRatio";
+            // 
+            // lblCalculateLuminosityRatioFromMass
+            // 
+            lblCalculateLuminosityRatioFromMass.AutoSize = true;
+            lblCalculateLuminosityRatioFromMass.Location = new Point(371, 433);
+            lblCalculateLuminosityRatioFromMass.Name = "lblCalculateLuminosityRatioFromMass";
+            lblCalculateLuminosityRatioFromMass.Size = new Size(311, 25);
+            lblCalculateLuminosityRatioFromMass.TabIndex = 34;
+            lblCalculateLuminosityRatioFromMass.Text = "lblCalculateLuminosityRatioFromMass";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(12, 433);
+            label4.Name = "label4";
+            label4.Size = new Size(292, 25);
+            label4.TabIndex = 33;
+            label4.Text = "CalculateLuminosityRatioFromMass";
+            // 
+            // lblCalculateLuminosityInWattsFromMass
+            // 
+            lblCalculateLuminosityInWattsFromMass.AutoSize = true;
+            lblCalculateLuminosityInWattsFromMass.Location = new Point(371, 467);
+            lblCalculateLuminosityInWattsFromMass.Name = "lblCalculateLuminosityInWattsFromMass";
+            lblCalculateLuminosityInWattsFromMass.Size = new Size(330, 25);
+            lblCalculateLuminosityInWattsFromMass.TabIndex = 36;
+            lblCalculateLuminosityInWattsFromMass.Text = "lblCalculateLuminosityInWattsFromMass";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(12, 467);
+            label6.Name = "label6";
+            label6.Size = new Size(311, 25);
+            label6.TabIndex = 35;
+            label6.Text = "CalculateLuminosityInWattsFromMass";
+            // 
+            // lblCalculateLuminosityExponent
+            // 
+            lblCalculateLuminosityExponent.AutoSize = true;
+            lblCalculateLuminosityExponent.Location = new Point(371, 538);
+            lblCalculateLuminosityExponent.Name = "lblCalculateLuminosityExponent";
+            lblCalculateLuminosityExponent.Size = new Size(261, 25);
+            lblCalculateLuminosityExponent.TabIndex = 38;
+            lblCalculateLuminosityExponent.Text = "lblCalculateLuminosityExponent";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(12, 538);
+            label15.Name = "label15";
+            label15.Size = new Size(333, 25);
+            label15.TabIndex = 37;
+            label15.Text = "CalculateLuminosityRatioFromMassRatio";
+            // 
+            // lblCalculateMassLuminosityRelation2
+            // 
+            lblCalculateMassLuminosityRelation2.AutoSize = true;
+            lblCalculateMassLuminosityRelation2.Location = new Point(371, 575);
+            lblCalculateMassLuminosityRelation2.Name = "lblCalculateMassLuminosityRelation2";
+            lblCalculateMassLuminosityRelation2.Size = new Size(301, 25);
+            lblCalculateMassLuminosityRelation2.TabIndex = 42;
+            lblCalculateMassLuminosityRelation2.Text = "lblCalculateMassLuminosityRelation2";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(12, 575);
+            label3.Name = "label3";
+            label3.Size = new Size(282, 25);
+            label3.TabIndex = 41;
+            label3.Text = "CalculateMassLuminosityRelation2";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(371, 502);
+            label5.Name = "label5";
+            label5.Size = new Size(352, 25);
+            label5.TabIndex = 40;
+            label5.Text = "lblCalculateLuminosityRatioFromMassRatio";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(12, 502);
+            label8.Name = "label8";
+            label8.Size = new Size(333, 25);
+            label8.TabIndex = 39;
+            label8.Text = "CalculateLuminosityRatioFromMassRatio";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(678, 566);
+            ClientSize = new Size(802, 1019);
+            Controls.Add(lblCalculateMassLuminosityRelation2);
+            Controls.Add(label3);
+            Controls.Add(label5);
+            Controls.Add(label8);
+            Controls.Add(lblCalculateLuminosityExponent);
+            Controls.Add(label15);
+            Controls.Add(lblCalculateLuminosityInWattsFromMass);
+            Controls.Add(label6);
+            Controls.Add(lblCalculateLuminosityRatioFromMass);
+            Controls.Add(label4);
+            Controls.Add(lblCalculateLuminosityFromMassRatio);
+            Controls.Add(label1);
             Controls.Add(label14);
             Controls.Add(lblRadius);
             Controls.Add(label13);
@@ -222,5 +354,17 @@
         private Label lblLuminosityRatio;
         private Label label14;
         private Label lblRadius;
+        private Label label1;
+        private Label lblCalculateLuminosityFromMassRatio;
+        private Label lblCalculateLuminosityRatioFromMass;
+        private Label label4;
+        private Label lblCalculateLuminosityInWattsFromMass;
+        private Label label6;
+        private Label lblCalculateLuminosityExponent;
+        private Label label15;
+        private Label lblCalculateMassLuminosityRelation2;
+        private Label label3;
+        private Label label5;
+        private Label label8;
     }
 }

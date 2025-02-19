@@ -9,7 +9,7 @@ namespace StarGen
         {
             InitializeComponent();
 
-            StarSystemSimulator.LoadStarTypesFromCSV("Harvard-Yerkes_Star_Classification_with_Full_Probabilities.csv");
+            StarSystemSimulator.LoadStarTypesFromCSV("Fully_Validated_Stellar_Classification_Data.csv");
 
             // Preserve original file order
             var orderedStarTypes = StarSystemSimulator.StarTypes.ToList();
@@ -50,9 +50,15 @@ namespace StarGen
             lblLuminosity.Text = myStar.StarLuminosity.ToString();
             lblInnerHabitableZone.Text = myStar.InnerHabitableZone.ToString();
             lblOuterHabitableZone.Text = myStar.OuterHabitableZone.ToString();
-            lblLuminosityRatio.Text = myStar.LuminosityRatio.ToString();
+            lblLuminosityRatio.Text = myStar.StarLuminosityRatio.ToString();
             lblRadius.Text = myStar.StarRadius.ToString();
             //myStar = StarSystemSimulator("TestStart", , double starLuminosity, double planetSize, double orbitalSpeed)
+
+            lblCalculateLuminosityFromMassRatio.Text = myStar.CalculateLuminosityFromMassRatio(myStar.StarMassRatio).ToString();
+            lblCalculateLuminosityRatioFromMass.Text = myStar.CalculateLuminosityRatioFromMass(myStar.StarMass).ToString();
+            lblCalculateLuminosityInWattsFromMass.Text = myStar.CalculateLuminosityInWattsFromMass(myStar.StarMass).ToString();
+            //lblCalculateLuminosityExponent.Text = myStar.CalculateLuminosityExponent(myStar.StarMass).ToString();
+            //lblCalculateMassLuminosityRelation2.Text = myStar.CalculateMassLuminosityRelation2(myStar.StarMass).ToString();
         }
     }
 }

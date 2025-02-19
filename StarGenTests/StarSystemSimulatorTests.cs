@@ -49,8 +49,9 @@ namespace StarGen.Tests
         public void CalculateMassLuminosityRelation_LowMass()
         {
             var simulator = new StarSystemSimulator("TestStar", 1.0 * 1.989e30, 3.828e26, 1.0, 30000);
+            double massRatio = 0.3;
             double mass = 0.3 * 1.989e30;
-            double expected = 3.828e26 * Math.Pow(mass, 2.3);            
+            double expected = Math.Pow(massRatio, 2.3);            
             double result = simulator.CalculateLuminosityRatioFromMass(mass);
             Assert.AreEqual(expected, result, 1e24, "Low-mass stars should match expected luminosity.");
         }
@@ -59,8 +60,9 @@ namespace StarGen.Tests
         public void CalculateMassLuminosityRelation_MediumMass()
         {
             var simulator = new StarSystemSimulator("TestStar", 1.0 * 1.989e30, 3.828e26, 1.0, 30000);
+            double massRatio = 1.5;
             double mass = 1.5 * 1.989e30;
-            double expected = 3.828e26 * Math.Pow(mass, 4.0);
+            double expected = Math.Pow(massRatio, 4.0);
             double result = simulator.CalculateLuminosityRatioFromMass(mass);
             Assert.AreEqual(expected, result, 1e24, "Medium-mass stars should match expected luminosity.");
         }
@@ -69,8 +71,9 @@ namespace StarGen.Tests
         public void CalculateMassLuminosityRelation_HighMass()
         {
             var simulator = new StarSystemSimulator("TestStar", 1.0 * 1.989e30, 3.828e26, 1.0, 30000);
-            double mass = 10.0 * 1.989e30;
-            double expected = 3.828e26 * Math.Pow(mass, 3.5);            
+            double massRatio = 10.0;
+            double mass = 10.0 * 1.989e30;            
+            double expected = Math.Pow(massRatio, 3.5);            
             double result = simulator.CalculateLuminosityRatioFromMass(mass);
             Assert.AreEqual(expected, result, 1e28, "High-mass stars should match expected luminosity.");
         }
@@ -79,8 +82,9 @@ namespace StarGen.Tests
         public void CalculateMassLuminosityRelation_VeryHighMass()
         {
             var simulator = new StarSystemSimulator("TestStar", 1.0 * 1.989e30, 3.828e26, 1.0, 30000);
+            double massRatio = 30.0;
             double mass = 30.0 * 1.989e30;
-            double expected = 3.828e26 * Math.Pow(mass, 3.0);            
+            double expected = Math.Pow(massRatio, 3.0);            
             double result = simulator.CalculateLuminosityRatioFromMass(mass);
             Assert.AreEqual(expected, result, 1e30, "Very high-mass stars should match expected luminosity.");
         }
