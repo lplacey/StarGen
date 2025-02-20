@@ -256,7 +256,7 @@ namespace StarGen
 
         #endregion
 
-        #region Rotational Calcuations
+        #region Rotational Calculations
 
         public double CalculateInitialRotationalSpeed(double mass)
         {
@@ -325,12 +325,23 @@ namespace StarGen
             return speed;
         }
 
-        public double CalculateRotationalSpeedDecay(double initialRotation, double initialAge, double finalAge)
+        public static double CalculateRotationalSpeedDecay(double initialSpeed, double size, double age)
         {
-            if (initialRotation <= 0 || initialAge <= 0 || finalAge <= initialAge)
-                return 0;
+            /*
+            Calculate the rotational speed decay of any stellar object based on its size.
 
-            return initialRotation * Math.Sqrt(initialAge / finalAge);
+            Parameters:
+                initialSpeed (double): Initial rotational speed in km/s
+                size (double): Size of the stellar object in km
+                age (double): Age of the object in Gyr ( Billions of years (1 Gyr = 10⁹ years))
+
+            Returns:
+                double: Rotational speed after decay in km/s
+            */
+
+            double decayRate = 0.1 / Math.Sqrt(size); // Larger objects decay more slowly
+            double finalSpeed = initialSpeed * Math.Exp(-decayRate * age);
+            return finalSpeed;
         }
 
         #endregion
