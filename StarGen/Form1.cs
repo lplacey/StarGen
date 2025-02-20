@@ -13,7 +13,7 @@ namespace StarGen
 
             // Preserve original file order
             var orderedStarTypes = StarSystemSimulator.StarTypes.ToList();
-            
+
             var reorderedStarTypes = orderedStarTypes
                 .GroupBy(s => new { s.spectralClass, s.color }) // Keep original type order
                 .SelectMany(g => g.OrderBy(s => s.subclass)) // Sort subclasses in ascending order
@@ -44,7 +44,7 @@ namespace StarGen
             string starSubclass = parts[2].Trim();  // Subclass is the 3rd element
 
             StarSystemSimulator myStar = new StarSystemSimulator(starType, starSubclass);
-            
+
             lblOutputMass.Text = myStar.Mass.ToString();
             lblLuminosity.Text = myStar.Luminosity.ToString();
             lblInnerHabitableZone.Text = myStar.StarInnerHabitableZone.ToString();
@@ -60,13 +60,20 @@ namespace StarGen
             string temp5 = myStar.AxialTilt.ToString();
             lblBlackBodyRadiation.Text = myStar.CalculateBlackBodyRadiation().ToString();
             lblSurfaceGravity.Text = myStar.CalculateSurfaceGravity().ToString();
+            lblRotationalPeriod.Text = myStar.RotationalPeriod.ToString();   
+            lblRotationalSpeed.Text = myStar.RotationalSpeed.ToString();
 
             string test = "Test";
-           
 
 
 
 
+
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
 
         }
     }

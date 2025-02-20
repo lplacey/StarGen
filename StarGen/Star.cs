@@ -235,17 +235,16 @@ namespace StarGen
                     //StarRadiusInMeters = CalculateRadiusFromRadiusRatio(StarRadiusRatio);
                     Radius = CalculateRadiusFromRadiusRatio(RadiusRatio);
 
-                    // Function to calculate the rotational speed (in km/s) based on mass of the star
-                    RotationalSpeed = CalculateRotationalSpeed(MassRatio);
+                    RotationalPeriod = (random.NextDouble() * (maxPeriod - minPeriod)) + minPeriod;
 
-                    // Function to calculate the rotational period (P) based on mass (in solar masses)
-                    RotationalPeriod = CalculateRotationalPeriod(MassRatio);
+                    // Function to calculate the rotational speed (in km/s) based on rotational period and radius of the star
+                    RotationalSpeed = CalculateRotationalSpeed(RotationalPeriod, Radius);
 
                     // Generate a random axial tilt for a star
                     // GenerateAxialTilt(mean, standard deviation);
                     AxialTilt = GenerateAxialTilt(0.0, 5.0);  // Mean tilt = 0° (aligned with galactic plane)  // Standard deviation = 5°
 
-                    double StarSurfaceTemp = CalculateSurfaceTemperatureFromMassRatio(MassRatio, Luminosity);    //temp of the sun in kelvin
+                    //double StarSurfaceTemp = CalculateSurfaceTemperatureFromMassRatio(MassRatio, Luminosity);    //temp of the sun in kelvin
 
                     SurfaceTemperature = CalculateSurfaceTemperature(Luminosity, Radius);
 

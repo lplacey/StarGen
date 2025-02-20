@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarGen", "StarGen\StarGen.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarGenTests", "StarGenTests\StarGenTests.csproj", "{7A9847A0-8DFB-405C-AD40-53344A5DB8BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{886D967B-DFEF-4ED8-A8A2-744DF68FFBD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7A9847A0-8DFB-405C-AD40-53344A5DB8BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A9847A0-8DFB-405C-AD40-53344A5DB8BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A9847A0-8DFB-405C-AD40-53344A5DB8BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{886D967B-DFEF-4ED8-A8A2-744DF68FFBD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886D967B-DFEF-4ED8-A8A2-744DF68FFBD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886D967B-DFEF-4ED8-A8A2-744DF68FFBD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886D967B-DFEF-4ED8-A8A2-744DF68FFBD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

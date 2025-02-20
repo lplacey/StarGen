@@ -11,7 +11,8 @@ namespace StarGen
         protected const double GravitationalConstant = 6.674e-11; // m^3 kg^-1 s^-2
         protected const double SolarRotationSpeed = 2e-6;  // in m/s (2 km/s)
         protected const double SolarMass = 1.989e30;       // kg        
-        protected const double RotationConstant = 2.6e-6;  // Empirical constant for mass-rotation relation
+        protected const double RotationConstant = 10;
+        //protected const double RotationConstant = 2.6e-6;  // Empirical constant for mass-rotation relation
         protected const double SolarRadius = 6.955e8;      // meters
         protected const double SolarLuminosity = 3.828e26; // Watts
         protected const double SolarTemperature = 5778;    // Kelvin 
@@ -27,7 +28,7 @@ namespace StarGen
         public double SurfaceTemperature { get; set; } // in Kelvin
         public double AxialTilt { get; set; } // in degrees
         public double RotationalSpeed { get; set; } // in m/s
-        public double RotationalPeriod { get; set; }
+        public double RotationalPeriod { get; set; } // in days
         public double Luminosity { get; set; } // in Watts
         public double LuminosityRatio { get; set; } // in Watts
         public double OrbitalSpeed { get; set; } // in m/s (if applicable)
@@ -89,14 +90,6 @@ namespace StarGen
             return SolarLuminosity * luminosityRatio;
         }
 
-        public double CalculateMassRatioFromMass(double massInKg)
-        {
-            if (massInKg <= 0)
-                return 0;
-
-            return massInKg / SolarMass;
-        }
-
         public double CalculateLuminosityRatioFromMass(double massInKg)
         {
             if (massInKg <= 0)
@@ -122,6 +115,20 @@ namespace StarGen
 
             return CalculateLuminosityFromMassRatio(massRatio) / SolarLuminosity;
         }
+
+        #endregion
+
+        #region Mass Calculations
+
+        public double CalculateMassRatioFromMass(double massInKg)
+        {
+            if (massInKg <= 0)
+                return 0;
+
+            return massInKg / SolarMass;
+        }
+
+       
 
         #endregion
 
@@ -260,29 +267,62 @@ namespace StarGen
             return SolarRotationSpeed * Math.Pow(mass / SolarMass, exponent);
         }
 
-        public double CalculateRotationalPeriod(double mass)
+        public double CalculateRotationalPeriod(double MassRatio)
         {
-            return RotationConstant / Math.Sqrt(mass);
+            //return RotationConstant / Math.Sqrt(MassRatio);
+
+            if (MassRatio <= 0)
+            {
+                throw new ArgumentException("Mass must be greater than zero.");
+            }
+
+            // Empirical constant (adjustable based on observations)
+            const double k = 1.5;
+
+            // Rotational period estimation using an empirical relationship
+            double rotationalPeriod = k * Math.Pow(MassRatio, -0.5);
+
+            return rotationalPeriod;
         }
 
-        public double CalculateRotationalSpeed(double mass)
+        
+
+        public static double CalculateRotationalPeriodWithAge(double massInSolarMasses, double ageInBillionYears)
         {
-            // Calculate the radius (in Solar radii)
-            double radius = CalculateRadiusRatio(mass);
+            if (massInSolarMasses <= 0 || ageInBillionYears <= 0)
+            {
+                throw new ArgumentException("Mass and age must be greater than zero.");
+            }
 
-            // Convert radius to meters (1 R⊙ = 6.96 x 10^8 m)
-            double radiusInMeters = radius * 6.96e8;
+            // Empirical constants from Barnes (2007)
+            const double k = 0.77;
+            const double a = -0.5;
+            const double b = 0.56;
 
-            // Calculate the rotational period (in seconds)
-            double rotationalPeriod = CalculateRotationalPeriod(mass) * 86400; // Convert days to seconds
+            // Calculate rotational period
+            double rotationalPeriod = k * Math.Pow(massInSolarMasses, a) * Math.Pow(ageInBillionYears, b);
 
-            // Calculate the equatorial velocity (v_rot = 2 * pi * R / P)
-            double rotationalSpeed = (2 * Math.PI * radiusInMeters) / rotationalPeriod;
+            return rotationalPeriod;
+        }
 
-            // Convert rotational speed to km/s
-            rotationalSpeed /= 1000;
+        public static double CalculateRotationalSpeed(double rotationalPeriod, double radiusInMeters)
+        {
+            /*
+            Calculate the rotational speed of a star based on its rotational period and radius.
 
-            return rotationalSpeed;  // in km/s
+            Parameters:
+                rotationalPeriod (double): Rotational period in days
+                radius (double): Radius of the star in kilometers
+
+            Returns:
+                double: Rotational speed in km/s
+            */
+
+            double periodInSeconds = rotationalPeriod * 24 * 3600; // Convert days to seconds
+            double circumference = 2 * Math.PI * (radiusInMeters / 1000); // Circumference of the star
+            double speed = circumference / periodInSeconds; // Speed in km/s
+
+            return speed;
         }
 
         public double CalculateRotationalSpeedDecay(double initialRotation, double initialAge, double finalAge)

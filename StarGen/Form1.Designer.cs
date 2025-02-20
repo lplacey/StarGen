@@ -52,9 +52,11 @@
             label2 = new Label();
             lblSurfaceGravity = new Label();
             label4 = new Label();
-            label5 = new Label();
+            lblRotationalPeriod = new Label();
             label6 = new Label();
             lblBlackBodyRadiation = new Label();
+            label3 = new Label();
+            lblRotationalSpeed = new Label();
             SuspendLayout();
             // 
             // lblOutputMass
@@ -269,20 +271,20 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(96, 510);
+            label4.Location = new Point(62, 510);
             label4.Name = "label4";
-            label4.Size = new Size(59, 25);
+            label4.Size = new Size(147, 25);
             label4.TabIndex = 52;
-            label4.Text = "label4";
+            label4.Text = "Rotational Period";
             // 
-            // label5
+            // lblRotationalPeriod
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(220, 510);
-            label5.Name = "label5";
-            label5.Size = new Size(113, 25);
-            label5.TabIndex = 51;
-            label5.Text = "SurfaceTemp";
+            lblRotationalPeriod.AutoSize = true;
+            lblRotationalPeriod.Location = new Point(220, 510);
+            lblRotationalPeriod.Name = "lblRotationalPeriod";
+            lblRotationalPeriod.Size = new Size(147, 25);
+            lblRotationalPeriod.TabIndex = 51;
+            lblRotationalPeriod.Text = "Rotational Period";
             // 
             // label6
             // 
@@ -302,15 +304,36 @@
             lblBlackBodyRadiation.TabIndex = 53;
             lblBlackBodyRadiation.Text = "BlackBodyRadiation";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(62, 545);
+            label3.Name = "label3";
+            label3.Size = new Size(147, 25);
+            label3.TabIndex = 56;
+            label3.Text = "Rotational Speed";
+            label3.Click += label3_Click;
+            // 
+            // lblRotationalSpeed
+            // 
+            lblRotationalSpeed.AutoSize = true;
+            lblRotationalSpeed.Location = new Point(220, 545);
+            lblRotationalSpeed.Name = "lblRotationalSpeed";
+            lblRotationalSpeed.Size = new Size(147, 25);
+            lblRotationalSpeed.TabIndex = 55;
+            lblRotationalSpeed.Text = "Rotational Speed";            
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(802, 1019);
+            Controls.Add(label3);
+            Controls.Add(lblRotationalSpeed);
             Controls.Add(label6);
             Controls.Add(lblBlackBodyRadiation);
             Controls.Add(label4);
-            Controls.Add(label5);
+            Controls.Add(lblRotationalPeriod);
             Controls.Add(label2);
             Controls.Add(lblSurfaceGravity);
             Controls.Add(label1);
@@ -365,8 +388,10 @@
         private Label label2;
         private Label lblSurfaceGravity;
         private Label label4;
-        private Label label5;
+        private Label lblRotationalPeriod;
         private Label label6;
         private Label lblBlackBodyRadiation;
+        private Label label3;
+        private Label lblRotationalSpeed;
     }
 }
