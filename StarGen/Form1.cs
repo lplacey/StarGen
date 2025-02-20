@@ -45,15 +45,15 @@ namespace StarGen
 
             StarSystemSimulator myStar = new StarSystemSimulator(starType, starSubclass);
             
-            lblOutputMass.Text = myStar.StarMass.ToString();
-            lblLuminosity.Text = myStar.StarLuminosity.ToString();
+            lblOutputMass.Text = myStar.Mass.ToString();
+            lblLuminosity.Text = myStar.Luminosity.ToString();
             lblInnerHabitableZone.Text = myStar.StarInnerHabitableZone.ToString();
             lblOuterHabitableZone.Text = myStar.StarOuterHabitableZone.ToString();
-            lblLuminosityRatio.Text = myStar.StarLuminosityRatio.ToString();
-            lblRadiusRatio.Text = myStar.StarRadiusRatio.ToString();
-            lblMassRatio.Text = myStar.StarMassRatio.ToString();
+            lblLuminosityRatio.Text = myStar.LuminosityRatio.ToString();
+            lblRadiusRatio.Text = myStar.RadiusRatio.ToString();
+            lblMassRatio.Text = myStar.MassRatio.ToString();
             lblSurfaceTemp.Text = myStar.SurfaceTemperature.ToString();
-            lblRadiusInMeters.Text = myStar.StarRadiusInMeters.ToString();
+            lblRadiusInMeters.Text = myStar.Radius.ToString();
 
             string temp1 = myStar.RotationalSpeed.ToString();
             string temp4 = myStar.OrbitalSpeed.ToString();
